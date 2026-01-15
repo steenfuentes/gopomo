@@ -1,4 +1,3 @@
-// Package ui provides terminal display components for the pomodoro timer.
 package ui
 
 import (
@@ -20,7 +19,6 @@ var (
 	dimColor       = color.New(color.Faint)
 )
 
-// Progress displays pomodoro progress using mpb.
 type Progress struct {
 	container   *mpb.Progress
 	phaseBar    *mpb.Bar
@@ -31,8 +29,6 @@ type Progress struct {
 	lastPhase   engine.Phase
 }
 
-// NewProgress creates a progress display.
-// If totalPhases > 0, an overall progress bar is shown.
 func NewProgress(totalPhases int, output io.Writer) *Progress {
 	opts := []mpb.ContainerOption{
 		mpb.WithWidth(50),
@@ -65,7 +61,6 @@ func NewProgress(totalPhases int, output io.Writer) *Progress {
 	return p
 }
 
-// Update processes a timer event and updates the display.
 func (p *Progress) Update(e engine.TimerEvent) {
 	if p.phaseBar == nil || e.Phase != p.lastPhase {
 		if p.phaseBar != nil {
@@ -100,7 +95,6 @@ func (p *Progress) Update(e engine.TimerEvent) {
 	}
 }
 
-// Wait blocks until all bars complete.
 func (p *Progress) Wait() {
 	if p.phaseBar != nil {
 		p.phaseBar.SetCurrent(p.phaseTotal)

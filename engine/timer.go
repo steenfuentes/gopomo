@@ -5,10 +5,8 @@ import (
 	"time"
 )
 
-// DefaultTickInterval is the frequency at which timer events are emitted.
 const DefaultTickInterval = 200 * time.Millisecond
 
-// TimerEvent is sent on each tick or phase completion.
 type TimerEvent struct {
 	Phase         Phase
 	Elapsed       time.Duration
@@ -22,19 +20,16 @@ type TimerEvent struct {
 	TotalPhases   int
 }
 
-// Timer runs a pomodoro session, emitting events on each tick.
 type Timer struct {
 	clock        Clock
 	tickInterval time.Duration
 	session      *Session
 }
 
-// NewTimer creates a timer with the real system clock.
 func NewTimer(cfg Config) *Timer {
 	return NewTimerWithClock(cfg, RealClock{}, DefaultTickInterval)
 }
 
-// NewTimerWithClock creates a timer with a custom clock for testing.
 func NewTimerWithClock(cfg Config, clock Clock, tickInterval time.Duration) *Timer {
 	return &Timer{
 		clock:        clock,
@@ -43,11 +38,9 @@ func NewTimerWithClock(cfg Config, clock Clock, tickInterval time.Duration) *Tim
 	}
 }
 
-// Session returns the underlying session.
 func (t *Timer) Session() *Session { return t.session }
 
-// Run executes the full session, sending events to the provided channel.
-// It blocks until session completes or context is cancelled.
+// Run blocks until session completes or context is cancelled.
 func (t *Timer) Run(ctx context.Context, events chan<- TimerEvent) error {
 	defer close(events)
 

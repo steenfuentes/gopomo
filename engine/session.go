@@ -1,9 +1,7 @@
-// Package engine implements the core pomodoro timing logic.
 package engine
 
 import "time"
 
-// Phase represents the current phase of the pomodoro session.
 type Phase int
 
 const (
@@ -28,7 +26,6 @@ func (p Phase) String() string {
 	}
 }
 
-// Config holds session configuration.
 type Config struct {
 	WorkDuration       time.Duration
 	ShortBreakDuration time.Duration
@@ -37,7 +34,7 @@ type Config struct {
 	TotalCycles        int
 }
 
-// Session manages pomodoro state transitions.
+// Handles state transitions
 type Session struct {
 	config         Config
 	currentPhase   Phase
@@ -46,7 +43,6 @@ type Session struct {
 	phasesComplete int
 }
 
-// NewSession creates a session with the given configuration.
 func NewSession(cfg Config) *Session {
 	s := &Session{
 		config:       cfg,
@@ -75,22 +71,12 @@ func (s *Session) calculateTotalPhases() int {
 	return phases
 }
 
-// CurrentPhase returns the current phase.
 func (s *Session) CurrentPhase() Phase { return s.currentPhase }
-
-// CyclesComplete returns completed work cycles.
 func (s *Session) CyclesComplete() int { return s.cyclesComplete }
-
-// TotalCycles returns total cycles configured.
-func (s *Session) TotalCycles() int { return s.config.TotalCycles }
-
-// TotalPhases returns total phases in session.
-func (s *Session) TotalPhases() int { return s.totalPhases }
-
-// PhasesComplete returns completed phases.
+func (s *Session) TotalCycles() int    { return s.config.TotalCycles }
+func (s *Session) TotalPhases() int    { return s.totalPhases }
 func (s *Session) PhasesComplete() int { return s.phasesComplete }
 
-// PhaseDuration returns the duration of the current phase.
 func (s *Session) PhaseDuration() time.Duration {
 	switch s.currentPhase {
 	case PhaseWork:
@@ -104,7 +90,6 @@ func (s *Session) PhaseDuration() time.Duration {
 	}
 }
 
-// NextPhase transitions to the next phase and returns it.
 func (s *Session) NextPhase() Phase {
 	if s.currentPhase == PhaseDone {
 		return PhaseDone

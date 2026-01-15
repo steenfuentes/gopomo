@@ -2,20 +2,17 @@ package engine
 
 import "time"
 
-// Clock abstracts time operations for testability.
 type Clock interface {
 	Now() time.Time
 	NewTicker(d time.Duration) Ticker
 	Sleep(d time.Duration)
 }
 
-// Ticker abstracts time.Ticker for testability.
 type Ticker interface {
 	C() <-chan time.Time
 	Stop()
 }
 
-// RealClock uses the system monotonic clock.
 type RealClock struct{}
 
 func (RealClock) Now() time.Time                   { return time.Now() }
@@ -26,13 +23,11 @@ type realTicker struct{ *time.Ticker }
 
 func (t *realTicker) C() <-chan time.Time { return t.Ticker.C }
 
-// MockClock provides manual time control for testing.
 type MockClock struct {
 	current time.Time
 	tickers []*MockTicker
 }
 
-// NewMockClock creates a MockClock starting at the given time.
 func NewMockClock(start time.Time) *MockClock {
 	return &MockClock{current: start}
 }
@@ -54,7 +49,6 @@ func (m *MockClock) Sleep(d time.Duration) {
 	m.Advance(d)
 }
 
-// Advance moves time forward and fires any due tickers.
 func (m *MockClock) Advance(d time.Duration) {
 	target := m.current.Add(d)
 	for m.current.Before(target) {
@@ -82,7 +76,6 @@ func (m *MockClock) Advance(d time.Duration) {
 	}
 }
 
-// MockTicker is a controllable ticker for testing.
 type MockTicker struct {
 	interval time.Duration
 	ch       chan time.Time
