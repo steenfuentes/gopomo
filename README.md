@@ -1,4 +1,4 @@
-# pomo
+# GoPomo
 
 A CLI pomodoro timer built for personal use.
 Supports progress bars and long break support.
